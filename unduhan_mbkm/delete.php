@@ -14,15 +14,24 @@ $request = file_get_contents("php://input");
 $decoded_request = json_decode($request, true);
 
 $item_id = $decoded_request['id'];
+$mbkm_unduhan_id = $item_id;
 
-$query = "DELETE MBKM_UNDUHAN WHERE ID = $item_id";
-$parse_sql = oci_parse($conn, $query);
+$query_child = "DELETE MBKM_PROGRAM_UNDUHAN WHERE MBKM_UNDUHAN_ID = $item_id";
 
-$execute = oci_execute($parse_sql);
+$parse_sql = oci_parse($conn, $query_child);
+
+$execute = oci_execute($parse_sql) or die(oci_error());
 
 if ($execute) {
-    createSuccessResponse($execute, 'Item deleted successfully!!');
+    $query = "DELETE MBKM_UNDUHAN WHERE ID = $item_id";
+    $parse_sql = oci_parse($conn, $query);
+    $execute = oci_execute($parse_sql) or die(oci_error());
+    
+    if ($execute)
+        createSuccessResponse($execute, 'Item deleted successfully!!');
+    else
+        createErrorResponse('Delete data failed!');
 } else {
-    createErrorResponse('Delete item failed!');
+    createErrorResponse('Delete program failed!');
 }
 ?>

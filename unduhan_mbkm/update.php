@@ -14,7 +14,7 @@ $request = file_get_contents("php://input");
 $decoded_request = json_decode($request, true);
 
 $item_id = $decoded_request['id'];
-$mbkmProgramId = $decoded_request["mbkmProgramId"];
+$mbkmKategoriId = $decoded_request["mbkmKategoriId"];
 $unduhanName = $decoded_request["unduhanName"];
 $description = $decoded_request["description"];
 $document = $decoded_request["document"];
@@ -22,7 +22,7 @@ $document = $decoded_request["document"];
 $query = 
     "UPDATE MBKM_UNDUHAN 
     SET 
-    MBKM_PROGRAM_ID = '$mbkmProgramId',
+    MBKM_KATEGORI_ID = '$mbkmKategoriId',
     UNDUHAN_NAME = '$unduhanName',
     DESCRIPTION = '$description', 
     DOCUMENT = '$document'

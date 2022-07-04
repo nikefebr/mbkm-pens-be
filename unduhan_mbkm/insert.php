@@ -9,12 +9,13 @@
 
     $input = json_decode(file_get_contents("php://input"), true);
  
-    $mbkmProgramId = $input["mbkmProgramId"];
+    $mbkmKategoriId = $input["mbkmKategoriId"];
     $unduhanName = $input["unduhanName"];
     $description = $input["description"];
     $document = $input["document"];
+    $documentName = $input["documentName"];
 
-    $query = "INSERT INTO MBKM_UNDUHAN VALUES (SEQ_UNDUHAN.NEXTVAL, '$unduhanName', '$description', '$document') returning ID into :inserted_id";
+    $query = "INSERT INTO MBKM_UNDUHAN VALUES (SEQ_UNDUHAN.NEXTVAL, '$unduhanName', '$description', '$document', '$documentName') returning ID into :inserted_id";
     
     $conn = createDatabaseConnection();
 
@@ -25,8 +26,8 @@
     $exe = oci_execute($parse_sql) or die(oci_error());
 
     if ($exe) {
-        for($x=0; $x<count($mbkmProgramId); $x++) {
-            $sql = "INSERT INTO MBKM_PROGRAM_UNDUHAN VALUES (SEQ_MBKM_PROGRAM_UNDUHAN.NEXTVAL, $idNumber, '$mbkmProgramId[$x]')";
+        for($x=0; $x<count($mbkmKategoriId); $x++) {
+            $sql = "INSERT INTO MBKM_PROGRAM_UNDUHAN VALUES (SEQ_MBKM_PROGRAM_UNDUHAN.NEXTVAL, $idNumber, '$mbkmKategoriId[$x]')";
 
             $parse = oci_parse($conn, $sql);
             
@@ -36,9 +37,13 @@
         $query = "SELECT * FROM MBKM_UNDUHAN WHERE ID = $idNumber";
         $parse_sql = oci_parse($conn, $query);
     
-        oci_execute($parse_sql) or die(oci_error());
-        $query_result = oci_fetch_object($parse_sql, OCI_ASSOC+OCI_RETURN_NULLS);
-  
-        createSuccessResponse($query_result, 'Item added successfully!');
+        $execute = oci_execute($parse_sql) or die(oci_error());
+
+        if($execute) {
+            $query_result = oci_fetch_object($parse_sql, OCI_ASSOC+OCI_RETURN_NULLS);
+            createSuccessResponse($query_result, 'Item added successfully!');
+        } else {
+            createErrorResponse('Failed add item');
+        }
     }
 ?>
