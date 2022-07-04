@@ -25,11 +25,16 @@
     
     if ($hasil) {
         $hasil_decoded = json_decode($hasil, true);
+        $nip = null;
+        
+        if(array_key_exists('NIP', $hasil_decoded))
+            $nip = $hasil_decoded['NIP'] ;
+        else
+            $nrp = $hasil_decoded['NRP'];    
+
         $conn = createDatabaseConnection();
         
-        if(array_key_exists("NIP", $hasil_decoded)) {
-            $nip = $hasil_decoded['NIP'];
-
+        if($nip) {
             if($nip == 199210122018032001) {
                 $role = 'Admin';
                 $query = "SELECT * FROM PEGAWAI WHERE NIP = '$nip'";
@@ -83,27 +88,21 @@
                     createErrorResponse('Login failed!');
                 }
             }
-        }
-        else {
-            $nrp = $hasil_decoded['NRP'];
+        } else {
+            $role = 'Mahasiswa';
+            $query = "SELECT * FROM MAHASISWA WHERE NRP = '$nrp'";
+            $parse_sql = oci_parse($conn, $query);
+            
+            oci_execute($parse_sql) or die(oci_error());
+            $query_result = oci_fetch_object($parse_sql, OCI_ASSOC+OCI_RETURN_NULLS);
 
-            if($nrp) {
-                $role = 'Mahasiswa';
-                $query = "SELECT * FROM MAHASISWA WHERE NRP = '$nrp'";
-                $parse_sql = oci_parse($conn, $query);
-                
-                oci_execute($parse_sql) or die(oci_error());
-                $query_result = oci_fetch_object($parse_sql, OCI_ASSOC+OCI_RETURN_NULLS);
-    
-                $appendDetail = (array)$query_result;
-                $appendDetail['NETID'] = $hasil_decoded['netid'];
-                $appendDetail['role'] = $role;
-                $appendDetail = (object)$appendDetail;
-    
-                createSuccessResponse($appendDetail, 'Login success!');
-            }
-        }
+            $appendDetail = (array)$query_result;
+            $appendDetail['NETID'] = $hasil_decoded['netid'];
+            $appendDetail['role'] = $role;
+            $appendDetail = (object)$appendDetail;
 
+            createSuccessResponse($appendDetail, 'Login success!');
+        }
     } else {
         createErrorResponse('Login failed!');
     }
