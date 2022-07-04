@@ -8,16 +8,19 @@
     header("Access-Control-Allow-Methods: POST");
     header("Content-Type: application/json; charset=UTF-8");
 
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    $kelas = $input["kelas"];
+
     $conn = createDatabaseConnection();
+    
     $query = 
-        "SELECT P.ID, P.PROGRAM_NAME, R.ID, R.STUDENT_ID, R.MBKM_PROGRAM_ID,
-        R.HANDPHONE, R.DESCRIPTION, R.MITRA_NAME, R.MITRA_ADDRESS, R.LINK_WEBSITE_MITRA,
-        R.STATUS, R.KAPRODI_ID, R.COURSE_ID, R.DPK_ID, R.REASON, R.SUGGESTION, R.DATE_START,
-        R.DATE_END, R.STATUS_KEGIATAN, R.LOGBOOK, M.NRP, M.NAMA
-        FROM MBKM_PROGRAM P 
-            RIGHT JOIN MBKM_REGISTRATION R ON P.ID = MBKM_PROGRAM_ID
-            LEFT JOIN MAHASISWA M ON R.STUDENT_ID = M.NRP
-        ORDER BY R.ID";
+        "SELECT K.NOMOR, K.PROGRAM, K.JURUSAN, K.KELAS,
+        M.NOMOR, M.MATAKULIAH, M.PROGRAM, M.JURUSAN, M.KELAS 
+        FROM KELAS K
+            RIGHT JOIN MATAKULIAH M ON K.PROGRAM = M.PROGRAM AND K.JURUSAN = M.JURUSAN
+            AND K.KELAS = M.KELAS
+        WHERE K.NOMOR = $kelas";
 
     $parse_sql = oci_parse($conn, $query);
     $query_result = [];

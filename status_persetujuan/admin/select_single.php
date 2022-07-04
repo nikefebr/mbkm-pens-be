@@ -13,14 +13,9 @@ $conn = createDatabaseConnection();
 $request = file_get_contents("php://input");
 $decoded_request = json_decode($request, true);
 
-$item_id = $decoded_request['id'];
+$id = $decoded_request['id'];
 
-$query = 
-    "SELECT K.ID, K.LINK_WEBSITE, P.ID, P.MBKM_KATEGORI_ID, P.PROGRAM_NAME, R.MBKM_PROGRAM_ID 
-    FROM MBKM_REGISTRATION R
-        RIGHT JOIN MBKM_PROGRAM P ON P.ID = R.MBKM_PROGRAM_ID
-        RIGHT JOIN MBKM_KATEGORI_PROGRAM K ON K.ID = P.MBKM_KATEGORI_ID
-    WHERE P.ID = $item_id";
+$query = "SELECT * FROM MBKM_REGISTRATION WHERE MBKM_REGISTRATION.ID = $id";
 
 $parse = oci_parse($conn, $query);
 oci_execute($parse) or die(oci_error());

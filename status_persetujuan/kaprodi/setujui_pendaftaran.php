@@ -16,7 +16,6 @@ $decoded_request = json_decode($request, true);
 $id = $decoded_request['id'];
 $status = $decoded_request['status'];
 $statusKegiatan = 'Kegiatan Terdaftar';
-$semesterId = $decoded_request['semesterId'];
 $mataKuliahKonversiId = $decoded_request['mataKuliahKonversiId'];
 $dosenPembimbingKegiatanId = $decoded_request['dosenPembimbingKegiatanId'];
 $documents = $decoded_request['documents'];
@@ -26,7 +25,6 @@ $query =
     "UPDATE MBKM_REGISTRATION 
     SET 
     STATUS = '$status', 
-    SEMESTER_ID = $semesterId,
     COURSE_ID = $mataKuliahKonversiId,
     DPK_ID = $dosenPembimbingKegiatanId,
     STATUS_KEGIATAN = '$statusKegiatan'
@@ -40,7 +38,7 @@ try {
     createErrorResponse('Item update failed!');
 } finally {
     for($x=0; $x<count($documents); $x++) {
-        for($y=0; $x<count($documentsName); $y++) {
+        for($y=0; $y<count($documentsName); $y++) {
             $sql = "INSERT INTO APPROVAL_DOCUMENT VALUES (SEQ_APPROVAL_DOCUMENT.NEXTVAL, $id, '$documents[$x]', '$documentsName[$y]')";
 
             $parse = oci_parse($conn, $sql);

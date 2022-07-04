@@ -8,13 +8,21 @@
     header("Access-Control-Allow-Methods: POST");
     header("Content-Type: application/json; charset=UTF-8");
 
+    $input = json_decode(file_get_contents("php://input"), true);
+
+    $dosenWaliId = $input["dosenWaliId"];
+
     $conn = createDatabaseConnection();
-    $query = "SELECT P.ID, P.PROGRAM_NAME, R.ID, R.SEMESTER_ID, R.STUDENT_ID, R.MBKM_PROGRAM_ID,
-    R.HANDPHONE, R.DESCRIPTION, R.MITRA_NAME, R.MITRA_ADDRESS, R.LINK_WEBSITE_MITRA,
-    R.STATUS, R.PRODI_ID, R.COURSE_ID, R.DPK_ID, R.REASON, R.SUGGESTION, R.DATE_START,
-    R. DATE_END, R.STATUS_KEGIATAN, R.LOGBOOK
-    FROM MBKM_PROGRAM P RIGHT JOIN MBKM_REGISTRATION R ON P.ID = MBKM_PROGRAM_ID 
-    WHERE R.STATUS='Belum Disetujui' OR R.STATUS='Disetujui DPA' OR R.STATUS='Ditolak' ORDER BY R.ID";
+    $query = 
+        "SELECT P.ID, P.PROGRAM_NAME, R.ID, R.STUDENT_ID, R.MBKM_PROGRAM_ID,
+        R.HANDPHONE, R.DESCRIPTION, R.MITRA_NAME, R.MITRA_ADDRESS, R.LINK_WEBSITE_MITRA,
+        R.STATUS, R.KAPRODI_ID, R.DATE_START, R. DATE_END, R.LINK_KEGIATAN, R.DOSEN_WALI_ID,
+        R.LINK_WEBSITE_PROGRAM
+        FROM MBKM_PROGRAM P RIGHT JOIN MBKM_REGISTRATION R ON P.ID = MBKM_PROGRAM_ID 
+        WHERE R.DOSEN_WALI_ID = $dosenWaliId AND R.STATUS='Belum Disetujui' 
+        OR R.DOSEN_WALI_ID = $dosenWaliId AND R.STATUS='Disetujui DPA' 
+        OR R.DOSEN_WALI_ID = $dosenWaliId AND R.STATUS='Ditolak' 
+        ORDER BY R.ID";
 
     $parse_sql = oci_parse($conn, $query);
     $query_result = [];
