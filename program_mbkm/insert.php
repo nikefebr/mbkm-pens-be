@@ -9,6 +9,7 @@
 
     $input = json_decode(file_get_contents("php://input"), true);
  
+    $mbkmKategoriId = $input["mbkmKategoriId"];
     $programName = $input["programName"];
     $description = $input["description"];
     $linkWebsite = $input["linkWebsite"];
@@ -16,7 +17,7 @@
     $limit = $input["limit"];
     $requirement = $input["requirement"];
 
-    $query = "INSERT INTO MBKM_PROGRAM VALUES ('$programName', '$description', '$linkWebsite', '$deadline', '$limit', SEQ_PROGRAM.NEXTVAL) returning ID into :inserted_id";
+    $query = "INSERT INTO MBKM_PROGRAM VALUES (SEQ_PROGRAM.NEXTVAL, '$mbkmKategoriId', '$programName', '$description','$linkWebsite', '$deadline', '$limit') returning ID into :inserted_id";
     
     $conn = createDatabaseConnection();
 
@@ -28,13 +29,13 @@
 
     if ($exe) {
         for($x=0; $x<count($requirement); $x++) {
-            $sql = "INSERT INTO MBKM_REQUIREMENT VALUES ($idNumber, '$requirement[$x]', SEQ_REQUIREMENT.NEXTVAL)";
+            $sql = "INSERT INTO MBKM_REQUIREMENT VALUES (SEQ_REQUIREMENT.NEXTVAL, $idNumber, '$requirement[$x]')";
 
             $parse = oci_parse($conn, $sql);
             
             $execute = oci_execute($parse) or die(oci_error());
         }
-        
+                
         $query = "SELECT * FROM MBKM_PROGRAM WHERE ID = $idNumber";
         $parse_sql = oci_parse($conn, $query);
     

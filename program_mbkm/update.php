@@ -13,14 +13,13 @@ $conn = createDatabaseConnection();
 $request = file_get_contents("php://input");
 $decoded_request = json_decode($request, true);
 
-$item_id = $decoded_request['id'];
+$id = $decoded_request['id'];
 $programName = $decoded_request["programName"];
 $description = $decoded_request["description"];
 $linkWebsite = $decoded_request["linkWebsite"];
 $deadline = $decoded_request["deadline"];
 $limit = $decoded_request["limit"];
-// $requirement = $input["requirement"];
-$cover = $decoded_request["cover"];
+$requirement = $decoded_request["requirement"];
 
 $query = 
     "UPDATE MBKM_PROGRAM 
@@ -29,18 +28,25 @@ $query =
     DESCRIPTION = '$description', 
     LINK_WEBSITE = '$linkWebsite',
     DEADLINE = '$deadline',
-    LIMIT = '$limit',
-    COVER = '$cover'
-    WHERE ID = '$item_id'";
+    LIMIT = '$limit'
+    WHERE ID = '$id'";
 
 $parse_sql = oci_parse($conn, $query);
 
 try {
     oci_execute($parse_sql);
+
+    for($x=0; $x<count($requirement); $x++) {
+        $sql = "UPDATE MBKM_REQUIREMENT SET REQUIREMENT = '$requirement[$x]' WHERE MBKM_PROGRAM_ID = '$id'";
+
+        $parse = oci_parse($conn, $sql);
+        
+        $execute = oci_execute($parse) or die(oci_error());
+    }
 } catch (\Throwable $th) {
     createErrorResponse('Item update failed!');
 } finally {
-    $query = "SELECT * FROM MBKM_PROGRAM WHERE ID = $item_id";
+    $query = "SELECT * FROM MBKM_KATEGORI_PROGRAM WHERE ID = $id";
     $parse_sql = oci_parse($conn, $query);
 
     oci_execute($parse_sql) or die(oci_error());
