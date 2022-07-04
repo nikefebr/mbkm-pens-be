@@ -9,31 +9,35 @@
 
     $input = json_decode(file_get_contents("php://input"), true);
 
-    $handphone = $input["handphone"];
+    $semesterId = 0;
+    $studentId = $input["studentId"];
     $programId = $input["programId"];
-    $dateStart = $input["dateStart"];
-    $dateEnd = $input["dateEnd"];
+    $handphone = $input["handphone"];
     $description = $input["description"];
     $mitraName = $input["mitraName"];
     $mitraAddress = $input["mitraAddress"];
     $linkWebsiteMitra = $input["linkWebsiteMitra"];
-    $documents = $input["documents"];
-    $documentsName = $input["documentsName"];
+    $linkWebsiteProgram = $input["linkWebsiteProgram"];
     $status = "Belum Disetujui";
-    $semesterId = 0;
-    $studentId = 0;
-    $prodiId = 0;
+    $kaprodiId = $input["kaprodiId"];
     $courseId = 0;
     $dpkId = 0;
     $reason = "";
     $suggestion = "";
+    $dateStart = $input["dateStart"];
+    $dateEnd = $input["dateEnd"];
     $statusKegiatan = "";
     $logbook = "";
+    $linkKegiatan = $input["linkKegiatan"];
+    $dosenWaliId = $input["dosenWaliId"];
+    $documents = $input["documents"];
+    $documentsName = $input["documentsName"];
 
     $query = "INSERT INTO MBKM_REGISTRATION 
     VALUES (SEQ_REGISTRATION.NEXTVAL, $semesterId, $studentId,
-    '$programId', $handphone, '$description', '$mitraName', '$mitraAddress', '$linkWebsiteMitra', 
-    '$status', $prodiId, $courseId, $dpkId, '$reason', '$suggestion', '$dateStart', '$dateEnd', '$statusKegiatan', '$logbook') 
+    $programId, $handphone, '$description', '$mitraName', '$mitraAddress', '$linkWebsiteMitra',
+    '$status', $kaprodiId, $courseId, $dpkId, '$reason', '$suggestion', '$dateStart', '$dateEnd', 
+    '$statusKegiatan', '$logbook', '$linkKegiatan', $dosenWaliId, '$linkWebsiteProgram') 
     returning ID into :inserted_id";
     
     $conn = createDatabaseConnection();
@@ -45,15 +49,13 @@
     $exe = oci_execute($parse_sql) or die(oci_error());
 
     if ($exe) {
-        for($x=0; $x<count($documents); $x++) {
-            for($y=0; $y<count($documentsName); $y++) {
-                $sql = "INSERT INTO REGISTRATION_DOCUMENT 
-                VALUES (SEQ_REGISTRATION_DOCUMENT.NEXTVAL, $idNumber, '$documents[$x]', '$documentsName[$y]')";
+        for($y=0; $y<count($documentsName); $y++) {
+            $sql = "INSERT INTO REGISTRATION_DOCUMENT 
+            VALUES (SEQ_REGISTRATION_DOCUMENT.NEXTVAL, $idNumber, '$documents[$y]', '$documentsName[$y]')";
 
-                $parse = oci_parse($conn, $sql);
-                
-                $execute = oci_execute($parse) or die(oci_error());
-            }
+            $parse = oci_parse($conn, $sql);
+            
+            $execute = oci_execute($parse) or die(oci_error());
         }
 
         $query = "SELECT * FROM MBKM_REGISTRATION WHERE ID = $idNumber";
