@@ -10,16 +10,16 @@
 
     $input = json_decode(file_get_contents("php://input"), true);
 
-    $studentId = $input["studentId"];
+    $kaprodiId = $input["kaprodiId"];
 
     $conn = createDatabaseConnection();
     $query = 
         "SELECT P.ID, P.PROGRAM_NAME, R.ID, R.STUDENT_ID, R.MBKM_PROGRAM_ID,
         R.HANDPHONE, R.DESCRIPTION, R.MITRA_NAME, R.MITRA_ADDRESS, R.LINK_WEBSITE_MITRA,
-        R.STATUS, R.KAPRODI_ID, R.DATE_START, R. DATE_END, R.STATUS_KEGIATAN, R.LINK_KEGIATAN, R.DOSEN_WALI_ID,
+        R.STATUS, R.KAPRODI_ID, R.DATE_START, R. DATE_END, R.LINK_KEGIATAN, R.DOSEN_WALI_ID,
         R.LINK_WEBSITE_PROGRAM
         FROM MBKM_PROGRAM P RIGHT JOIN MBKM_REGISTRATION R ON P.ID = MBKM_PROGRAM_ID 
-        WHERE R.STUDENT_ID = $studentId AND R.STATUS_KEGIATAN='Kegiatan Aktif' 
+        WHERE R.KAPRODI_ID = $kaprodiId AND R.STATUS_KEGIATAN='Kegiatan Aktif' 
         ORDER BY R.ID";
 
     $parse_sql = oci_parse($conn, $query);
