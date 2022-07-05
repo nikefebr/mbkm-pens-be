@@ -35,14 +35,14 @@ try {
 } catch (\Throwable $th) {
     createErrorResponse('Item update failed!');
 } finally {
-    for($x=0; $x<count($documents); $x++) {
-        for($y=0; $x<count($documentsName); $y++) {
-            $sql = "INSERT INTO APPROVAL_ACTIVITY_DOCUMENT VALUES (SEQ_APPROVAL_ACTIVITY_DOCUMENT.NEXTVAL, $id, '$documents[$x]', '$documentsName[$y]')";
+    for($y=0; $x<count($documentsName); $y++) {
+        $sql = 
+            "INSERT INTO APPROVAL_ACTIVITY_DOCUMENT 
+            VALUES (SEQ_APPROVAL_ACTIVITY_DOCUMENT.NEXTVAL, $id, '$documents[$y]', '$documentsName[$y]')";
 
-            $parse = oci_parse($conn, $sql);
-            
-            $execute = oci_execute($parse) or die(oci_error());
-        }
+        $parse = oci_parse($conn, $sql);
+        
+        $execute = oci_execute($parse) or die(oci_error());
     }
 
     $query = "SELECT * FROM MBKM_REGISTRATION WHERE ID = $id";

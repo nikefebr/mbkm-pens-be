@@ -22,7 +22,6 @@ $document = $decoded_request["document"];
 $query = 
     "UPDATE MBKM_UNDUHAN 
     SET 
-    MBKM_KATEGORI_ID = '$mbkmKategoriId',
     UNDUHAN_NAME = '$unduhanName',
     DESCRIPTION = '$description', 
     DOCUMENT = '$document'
@@ -32,6 +31,22 @@ $parse_sql = oci_parse($conn, $query);
 
 try {
     oci_execute($parse_sql);
+
+    $sql = "SELECT ID FROM MBKM_PROGRAM_UNDUHAN WHERE MBKM_UNDUHAN_ID = $id";
+    $parse = ociparse($conn, $sql);
+    $execute = oci_execute($parse) or die (ocierror());
+    $query_result = [];
+    oci_fetch_all($parse, $query_result, 0, 0, OCI_FETCHSTATEMENT_BY_ROW);
+
+    for($x=0; $x<count($query_result); $x++) {
+        $variable = $query_result[$x]['ID'];
+        $sql = "UPDATE MBKM_PROGRAM_UNDUHAN SET MBKM_KATEGORI_ID = '$mbkmKategoriId[$x]' 
+        WHERE ID = $variable";
+
+        $parse = oci_parse($conn, $sql);
+        
+        $execute = oci_execute($parse) or die(oci_error());
+    }
 } catch (\Throwable $th) {
     createErrorResponse('Item update failed!');
 } finally {
