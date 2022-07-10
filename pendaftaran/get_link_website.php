@@ -15,12 +15,8 @@
     $conn = createDatabaseConnection();
     
     $query = 
-        "SELECT K.ID, K.LINK_WEBSITE, P.MBKM_KATEGORI_ID
-        
-        FROM MBKM_KATEGORI_PROGRAM K
-            RIGHT JOIN MBKM_PROGRAM P ON K.ID = P.MBKM_KATEGORI_ID
-        
-        WHERE P.MBKM_KATEGORI_ID = $mbkmKategoriId";
+        "SELECT ID, LINK_WEBSITE FROM MBKM_KATEGORI_PROGRAM
+        WHERE ID = $mbkmKategoriId";
 
     $parse_sql = oci_parse($conn, $query);
     $query_result = [];

@@ -9,7 +9,6 @@
 
     $input = json_decode(file_get_contents("php://input"), true);
 
-    $semesterId = 0;
     $studentId = $input["studentId"];
     $programId = $input["programId"];
     $handphone = $input["handphone"];
@@ -17,10 +16,8 @@
     $mitraName = $input["mitraName"];
     $mitraAddress = $input["mitraAddress"];
     $linkWebsiteMitra = $input["linkWebsiteMitra"];
-    $linkWebsiteProgram = $input["linkWebsiteProgram"];
     $status = "Belum Disetujui";
     $kaprodiId = $input["kaprodiId"];
-    $courseId = 0;
     $dpkId = 0;
     $reason = "";
     $suggestion = "";
@@ -30,14 +27,16 @@
     $logbook = "";
     $linkKegiatan = $input["linkKegiatan"];
     $dosenWaliId = $input["dosenWaliId"];
+    $namaKegiatan = $input["namaKegiatan"];
+    $statusDokumen = "";
     $documents = $input["documents"];
     $documentsName = $input["documentsName"];
 
     $query = "INSERT INTO MBKM_REGISTRATION 
-    VALUES (SEQ_REGISTRATION.NEXTVAL, $semesterId, $studentId,
+    VALUES (SEQ_REGISTRATION.NEXTVAL, $studentId,
     $programId, $handphone, '$description', '$mitraName', '$mitraAddress', '$linkWebsiteMitra',
-    '$status', $kaprodiId, $courseId, $dpkId, '$reason', '$suggestion', '$dateStart', '$dateEnd', 
-    '$statusKegiatan', '$logbook', '$linkKegiatan', $dosenWaliId, '$linkWebsiteProgram') 
+    '$status', $kaprodiId, $dpkId, '$reason', '$suggestion', '$dateStart', '$dateEnd', 
+    '$statusKegiatan', '$logbook', '$linkKegiatan', $dosenWaliId, '$namaKegiatan', '$statusDokumen') 
     returning ID into :inserted_id";
     
     $conn = createDatabaseConnection();

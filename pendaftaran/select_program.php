@@ -13,16 +13,13 @@ $conn = createDatabaseConnection();
 $request = file_get_contents("php://input");
 $decoded_request = json_decode($request, true);
 
-$id = $decoded_request['id'];
+$item_id = $decoded_request['id'];
 
 $query = 
-    "SELECT R.ID, R.MBKM_PROGRAM_ID,R.HANDPHONE, R.DESCRIPTION, R.MITRA_NAME,
-    R.MITRA_ADDRESS, R.LINK_WEBSITE_MITRA, R.STATUS, R.DPK_ID, R.REASON, 
-    R.SUGGESTION, R.DATE_START, R.DATE_END, R.LINK_KEGIATAN,
-    R.NAMA_KEGIATAN, M.ID, M.MBKM_REGISTRATION_ID, M.MBKM_COURSE_ID
-    FROM MBKM_REGISTRATION R 
-        LEFT JOIN MATAKULIAH_KONVERSI M ON R.ID = M.MBKM_REGISTRATION_ID 
-    WHERE R.ID = $id";
+    "SELECT P.ID, P.PROGRAM_NAME, R.MBKM_PROGRAM_ID
+    FROM MBKM_REGISTRATION R
+        RIGHT JOIN MBKM_PROGRAM P ON P.ID = R.MBKM_PROGRAM_ID
+    WHERE P.ID = $item_id";
 
 $parse = oci_parse($conn, $query);
 oci_execute($parse) or die(oci_error());

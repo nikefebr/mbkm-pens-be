@@ -5,20 +5,18 @@
     header("Access-Control-Allow-Methods: *");
     header("Access-Control-Allow-Headers: *");
     header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Methods: POST");
     header("Content-Type: application/json; charset=UTF-8");
 
     $input = json_decode(file_get_contents("php://input"), true);
 
-    $studentId = $input["studentId"];
+    $mbkmProgramId = $input["mbkmProgramId"];
 
     $conn = createDatabaseConnection();
+    
     $query = 
-        "SELECT P.ID, P.PROGRAM_NAME, P.TAHUN_AJARAN, P.SEMESTER, R.ID, R.STUDENT_ID, R.MBKM_PROGRAM_ID,
-        R.HANDPHONE, R.DESCRIPTION, R.MITRA_NAME, R.MITRA_ADDRESS, R.LINK_WEBSITE_MITRA,
-        R.STATUS, R.KAPRODI_ID, R.DATE_START, R. DATE_END, R.LINK_KEGIATAN, R.DOSEN_WALI_ID, R.NAMA_KEGIATAN
-        FROM MBKM_PROGRAM P RIGHT JOIN MBKM_REGISTRATION R ON P.ID = MBKM_PROGRAM_ID 
-        WHERE R.STUDENT_ID = $studentId
-        ORDER BY R.ID";
+        "SELECT * FROM MBKM_KATEGORI
+        WHERE MBKM_PROGRAM_ID = $mbkmProgramId";
 
     $parse_sql = oci_parse($conn, $query);
     $query_result = [];
