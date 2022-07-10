@@ -18,7 +18,6 @@ $programName = $decoded_request["programName"];
 $description = $decoded_request["description"];
 $linkWebsite = $decoded_request["linkWebsite"];
 $deadline = $decoded_request["deadline"];
-$limit = $decoded_request["limit"];
 $requirement = $decoded_request["requirement"];
 
 $query = 
@@ -28,7 +27,6 @@ $query =
     DESCRIPTION = '$description' 
     LINK_WEBSITE = '$linkWebsite',
     DEADLINE = '$deadline',
-    LIMIT = $limit
     WHERE ID = '$id'";
 
 $parse_sql = oci_parse($conn, $query);

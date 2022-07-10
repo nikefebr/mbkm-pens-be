@@ -13,10 +13,9 @@
     $description = $input["description"];
     $linkWebsite = $input["linkWebsite"];
     $deadline = $input["deadline"];
-    $limit = $input["limit"];
     $requirement = $input["requirement"];
 
-    $query = "INSERT INTO MBKM_KATEGORI_PROGRAM VALUES ('$programName', '$description', SEQ_KATEGORI_PROGRAM.NEXTVAL, '$linkWebsite', '$deadline', '$limit') returning ID into :inserted_id";
+    $query = "INSERT INTO MBKM_KATEGORI_PROGRAM VALUES ('$programName', '$description', SEQ_KATEGORI_PROGRAM.NEXTVAL, '$linkWebsite', '$deadline') returning ID into :inserted_id";
     
     $conn = createDatabaseConnection();
 
