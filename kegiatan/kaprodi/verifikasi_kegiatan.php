@@ -17,6 +17,7 @@ $id = $decoded_request['id'];
 $dateStart = $decoded_request['dateStart'];
 $dateEnd = $decoded_request['dateEnd'];
 $statusKegiatan = "Kegiatan Aktif";
+$statusDokumen = "Belum Diinputkan";
 $logbook = $decoded_request['logbook'];
 
 $query = 
@@ -25,7 +26,8 @@ $query =
     DATE_START = '$dateStart',
     DATE_END = '$dateEnd',
     STATUS_KEGIATAN = '$statusKegiatan',
-    LOGBOOK = '$logbook'
+    LOGBOOK = '$logbook',
+    STATUS_DOKUMEN = '$statusDokumen'
     WHERE ID = '$id'";
 
 $parse_sql = oci_parse($conn, $query);
