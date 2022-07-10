@@ -14,7 +14,6 @@ $request = file_get_contents("php://input");
 $decoded_request = json_decode($request, true);
 
 $idKategori = $decoded_request['idKategori'];
-$idUnduhan = $decoded_request['idKategori'];
 
 $query = "SELECT K.PROGRAM_NAME, K.DESCRIPTION, K.ID, P.MBKM_UNDUHAN_ID, P.MBKM_KATEGORI_ID FROM MBKM_KATEGORI_PROGRAM K RIGHT JOIN MBKM_PROGRAM_UNDUHAN P ON K.ID = P.MBKM_KATEGORI_ID
 WHERE K.ID = $idKategori";
