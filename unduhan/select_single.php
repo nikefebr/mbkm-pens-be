@@ -9,8 +9,16 @@
 
     $conn = createDatabaseConnection();
 
+    $request = file_get_contents("php://input");
+    $decoded_request = json_decode($request, true);
+
+    $kategoriProgramId = $decoded_request['kategoriProgramId'];
+
     $query = 
-        "SELECT * FROM MBKM_UNDUHAN";
+        "SELECT U.ID, U.UNDUHAN_NAME, U.DESCRIPTION, U.DOCUMENT,U.DOCUMENT_NAME, P.MBKM_KATEGORI_ID
+        FROM MBKM_UNDUHAN U
+        RIGHT JOIN MBKM_PROGRAM_UNDUHAN P ON P.MBKM_UNDUHAN_ID = U.ID
+        WHERE P.MBKM_KATEGORI_ID = $kategoriProgramId";
 
     $parse_sql = oci_parse($conn, $query);
     $query_result = [];
