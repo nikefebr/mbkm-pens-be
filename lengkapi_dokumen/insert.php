@@ -31,7 +31,17 @@
     $exe = oci_execute($parse_sql) or die(oci_error());
 
     if ($exe) {
-        $query = "SELECT * FROM MBKM_UNDUHAN WHERE ID = $idNumber";
+        $statusDokumen = "Sudah Diinputkan";
+
+        $query_status = 
+        "UPDATE MBKM_REGISTRATION
+        SET STATUS_DOKUMEN = '$statusDokumen'
+        WHERE ID = $id";
+
+        $parse_status = oci_parse($conn, $query_status);
+        $execute_status = oci_execute($parse_status) or die(oci_error());
+
+        $query = "SELECT * FROM REPORT_DOCUMENT WHERE ID = $idNumber";
         $parse_sql = oci_parse($conn, $query);
     
         $execute = oci_execute($parse_sql) or die(oci_error());
