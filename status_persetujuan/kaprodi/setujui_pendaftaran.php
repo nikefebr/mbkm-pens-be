@@ -25,7 +25,6 @@ $query =
     "UPDATE MBKM_REGISTRATION 
     SET 
     STATUS = '$status', 
-    COURSE_ID = $mataKuliahKonversiId,
     DPK_ID = $dosenPembimbingKegiatanId,
     STATUS_KEGIATAN = '$statusKegiatan'
     WHERE ID = '$id'";
@@ -37,6 +36,15 @@ try {
 } catch (\Throwable $th) {
     createErrorResponse('Item update failed!');
 } finally {
+    for($x=0; $x<count($mataKuliahKonversiId); $x++) {
+        $sql = "INSERT INTO MATAKULIAH_KONVERSI 
+        VALUES (SEQ_MATAKULIAH_KONVERSI.NEXTVAL, $id, '$mataKuliahKonversiId[$x]')";
+
+        $parse = oci_parse($conn, $sql);
+        
+        $execute = oci_execute($parse) or die(oci_error());
+    }
+
     for($y=0; $y<count($documentsName); $y++) {
         $sql = "INSERT INTO APPROVAL_DOCUMENT VALUES (SEQ_APPROVAL_DOCUMENT.NEXTVAL, $id, '$documents[$y]', '$documentsName[$y]')";
 
