@@ -9,7 +9,7 @@
 
     $input = json_decode(file_get_contents("php://input"), true);
  
-    $mbkmKategoriId = $input["mbkmKategoriId"];
+    $mbkmProgramId = $input["mbkmProgramId"];
     $unduhanName = $input["unduhanName"];
     $description = $input["description"];
     $document = $input["document"];
@@ -26,8 +26,8 @@
     $exe = oci_execute($parse_sql) or die(oci_error());
 
     if ($exe) {
-        for($x=0; $x<count($mbkmKategoriId); $x++) {
-            $sql = "INSERT INTO MBKM_PROGRAM_UNDUHAN VALUES (SEQ_MBKM_PROGRAM_UNDUHAN.NEXTVAL, $idNumber, '$mbkmKategoriId[$x]')";
+        for($x=0; $x<count($mbkmProgramId); $x++) {
+            $sql = "INSERT INTO MBKM_PROGRAM_UNDUHAN VALUES (SEQ_MBKM_PROGRAM_UNDUHAN.NEXTVAL, $idNumber, '$mbkmProgramId[$x]')";
 
             $parse = oci_parse($conn, $sql);
             

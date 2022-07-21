@@ -16,7 +16,7 @@ $decoded_request = json_decode($request, true);
 $item_id = $decoded_request['id'];
 
 $query = 
-    "SELECT P.ID, P.PROGRAM_NAME, R.MBKM_PROGRAM_ID
+    "SELECT P.ID, P.PROGRAM_NAME, P.LINK_WEBSITE, R.MBKM_PROGRAM_ID
     FROM MBKM_REGISTRATION R
         RIGHT JOIN MBKM_PROGRAM P ON P.ID = R.MBKM_PROGRAM_ID
     WHERE P.ID = $item_id";

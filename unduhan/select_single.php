@@ -12,13 +12,13 @@
     $request = file_get_contents("php://input");
     $decoded_request = json_decode($request, true);
 
-    $kategoriProgramId = $decoded_request['kategoriProgramId'];
+    $programId = $decoded_request['programId'];
 
     $query = 
-        "SELECT U.ID, U.UNDUHAN_NAME, U.DESCRIPTION, U.DOCUMENT,U.DOCUMENT_NAME, P.MBKM_KATEGORI_ID
+        "SELECT U.ID, U.UNDUHAN_NAME, U.DESCRIPTION, U.DOCUMENT,U.DOCUMENT_NAME, P.MBKM_PROGRAM_ID
         FROM MBKM_UNDUHAN U
         RIGHT JOIN MBKM_PROGRAM_UNDUHAN P ON P.MBKM_UNDUHAN_ID = U.ID
-        WHERE P.MBKM_KATEGORI_ID = $kategoriProgramId";
+        WHERE P.MBKM_PROGRAM_ID = $programId";
 
     $parse_sql = oci_parse($conn, $query);
     $query_result = [];

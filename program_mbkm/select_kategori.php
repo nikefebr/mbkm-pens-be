@@ -16,7 +16,7 @@ $decoded_request = json_decode($request, true);
 $idKategori = $decoded_request['idKategori'];
 
 $query = 
-    "SELECT PROGRAM_NAME, DESCRIPTION, ID 
+    "SELECT * 
     FROM MBKM_KATEGORI_PROGRAM
     WHERE ID = $idKategori";
 

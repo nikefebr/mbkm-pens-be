@@ -17,6 +17,7 @@ $id = $decoded_request['id'];
 $status = $decoded_request['status'];
 $statusKegiatan = 'Kegiatan Terdaftar';
 $mataKuliahKonversiId = $decoded_request['mataKuliahKonversiId'];
+$nilai = '';
 $dosenPembimbingKegiatanId = $decoded_request['dosenPembimbingKegiatanId'];
 $documents = $decoded_request['documents'];
 $documentsName = $decoded_request['documentsName'];
@@ -38,7 +39,7 @@ try {
 } finally {
     for($x=0; $x<count($mataKuliahKonversiId); $x++) {
         $sql = "INSERT INTO MATAKULIAH_KONVERSI 
-        VALUES (SEQ_MATAKULIAH_KONVERSI.NEXTVAL, $id, '$mataKuliahKonversiId[$x]')";
+        VALUES (SEQ_MATAKULIAH_KONVERSI.NEXTVAL, $id, '$mataKuliahKonversiId[$x]', '$nilai')";
 
         $parse = oci_parse($conn, $sql);
         

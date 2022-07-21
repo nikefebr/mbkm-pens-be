@@ -16,9 +16,10 @@ $decoded_request = json_decode($request, true);
 $item_id = $decoded_request['id'];
 
 $query = 
-    "SELECT K.PROGRAM_NAME, K.DESCRIPTION, K.ID, K.LINK_WEBSITE, K.DEADLINE, R.REQUIREMENT 
-    FROM MBKM_KATEGORI_PROGRAM K RIGHT JOIN MBKM_REQUIREMENT R ON K.ID = R.MBKM_KATEGORI_ID
-    WHERE K.ID = $item_id";
+    "SELECT P.PROGRAM_NAME, P.DESCRIPTION, P.ID, P.LINK_WEBSITE, P.DEADLINE, R.REQUIREMENT 
+    FROM MBKM_PROGRAM P 
+        RIGHT JOIN MBKM_REQUIREMENT R ON P.ID = R.MBKM_PROGRAM_ID
+    WHERE P.ID = $item_id";
 
 $parse = oci_parse($conn, $query);
 oci_execute($parse) or die(oci_error());

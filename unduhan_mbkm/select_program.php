@@ -13,13 +13,13 @@ $conn = createDatabaseConnection();
 $request = file_get_contents("php://input");
 $decoded_request = json_decode($request, true);
 
-$item_id = $decoded_request['id'];
+$idProgram = $decoded_request['idProgram'];
 
 $query = 
-    "SELECT U.ID, U.UNDUHAN_NAME, U.DESCRIPTION, U.DOCUMENT, P.MBKM_PROGRAM_ID 
-    FROM MBKM_UNDUHAN U 
-        RIGHT JOIN MBKM_PROGRAM_UNDUHAN P ON U.ID = P.MBKM_UNDUHAN_ID 
-    WHERE U.ID = $item_id";
+"SELECT P.PROGRAM_NAME, P.DESCRIPTION, P.ID, U.MBKM_UNDUHAN_ID, U.MBKM_PROGRAM_ID 
+FROM MBKM_PROGRAM P 
+    RIGHT JOIN MBKM_PROGRAM_UNDUHAN U ON P.ID = U.MBKM_PROGRAM_ID
+WHERE P.ID = $idProgram";
 
 $parse = oci_parse($conn, $query);
 oci_execute($parse) or die(oci_error());

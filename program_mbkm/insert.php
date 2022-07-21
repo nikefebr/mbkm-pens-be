@@ -15,9 +15,12 @@
     $semester = $input["semester"];
     $tahunAjaran = $input["tahunAjaran"];
     $limit = $input["limit"];
+    $linkWebsite = $input["linkWebsite"];
+    $deadline = $input["deadline"];
+    $requirement = $input["requirement"];
 
     $query = "INSERT INTO MBKM_PROGRAM 
-    VALUES (SEQ_PROGRAM.NEXTVAL, '$programName', '$description', '$semester', '$tahunAjaran', $limit) 
+    VALUES (SEQ_PROGRAM.NEXTVAL, '$programName', '$description', '$semester', '$tahunAjaran', $limit, '$linkWebsite', '$deadline') 
     returning ID into :inserted_id";
     
     $conn = createDatabaseConnection();
@@ -32,6 +35,14 @@
         for($x=0; $x<count($mbkmKategoriId); $x++) {
             $sql = "INSERT INTO MBKM_KATEGORI 
             VALUES (SEQ_KATEGORI.NEXTVAL, $idNumber, '$mbkmKategoriId[$x]')";
+
+            $parse = oci_parse($conn, $sql);
+            
+            $execute = oci_execute($parse) or die(oci_error());
+        }
+
+        for($x=0; $x<count($requirement); $x++) {
+            $sql = "INSERT INTO MBKM_REQUIREMENT VALUES (SEQ_REQUIREMENT.NEXTVAL, $idNumber, '$requirement[$x]')";
 
             $parse = oci_parse($conn, $sql);
             

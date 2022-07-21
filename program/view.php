@@ -9,7 +9,7 @@
     header("Content-Type: application/json; charset=UTF-8");
 
     $conn = createDatabaseConnection();
-    $query = "SELECT * FROM MBKM_KATEGORI_PROGRAM ORDER BY ID";
+    $query = "SELECT * FROM MBKM_PROGRAM ORDER BY ID";
 
     $parse_sql = oci_parse($conn, $query);
     $query_result = [];

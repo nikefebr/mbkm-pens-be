@@ -13,10 +13,15 @@ $conn = createDatabaseConnection();
 $request = file_get_contents("php://input");
 $decoded_request = json_decode($request, true);
 
-$idKategori = $decoded_request['idKategori'];
+$item_id = $decoded_request['id'];
 
-$query = "SELECT K.PROGRAM_NAME, K.DESCRIPTION, K.ID, P.MBKM_UNDUHAN_ID, P.MBKM_KATEGORI_ID FROM MBKM_KATEGORI_PROGRAM K RIGHT JOIN MBKM_PROGRAM_UNDUHAN P ON K.ID = P.MBKM_KATEGORI_ID
-WHERE K.ID = $idKategori";
+$query = 
+    "SELECT  P.ID, P.PROGRAM_NAME, P.DESCRIPTION, P.SEMESTER, P.TAHUN_AJARAN, P.LIMIT, 
+    P.LINK_WEBSITE, P.DEADLINE, R.REQUIREMENT
+    FROM MBKM_PROGRAM P 
+        RIGHT JOIN MBKM_REQUIREMENT R ON P.ID = R.MBKM_PROGRAM_ID
+    WHERE P.ID = $item_id
+    ORDER BY P.ID";
 
 $parse = oci_parse($conn, $query);
 oci_execute($parse) or die(oci_error());
