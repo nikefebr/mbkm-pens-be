@@ -1,6 +1,6 @@
 <?php
-    include "../connection.php";
-    include "../response.php";
+    include "../../connection.php";
+    include "../../response.php";
 
     header("Access-Control-Allow-Methods: *");
     header("Access-Control-Allow-Headers: *");
@@ -10,20 +10,15 @@
 
     $input = json_decode(file_get_contents("php://input"), true);
 
-    $studentId = $input["studentId"];
+    $registrationId = $input["registrationId"];
 
     $conn = createDatabaseConnection();
+    
     $query = 
-        "SELECT P.ID, P.PROGRAM_NAME, P.TAHUN_AJARAN, P.SEMESTER, R.ID, R.STUDENT_ID, R.MBKM_PROGRAM_ID,
-        R.HANDPHONE, R.DESCRIPTION, R.MITRA_NAME, R.MITRA_ADDRESS, R.LINK_WEBSITE_MITRA,
-        R.STATUS, R.KAPRODI_ID, R.DPK_ID, R.REASON, R.SUGGESTION, R.DATE_START,
-        R. DATE_END, R.STATUS_KEGIATAN, R.LOGBOOK, R.NAMA_KEGIATAN, R.STATUS_DOKUMEN
-        
-        FROM MBKM_REGISTRATION R 
-            RIGHT JOIN MBKM_PROGRAM P ON P.ID = R.MBKM_PROGRAM_ID
-        
-        WHERE R.STUDENT_ID = $studentId AND R.STATUS_KEGIATAN='Kegiatan Aktif' 
-        ORDER BY R.ID";
+        "SELECT K.ID, K.MBKM_REGISTRATION_ID, K.MBKM_COURSE_ID, M.KODE, M.MATAKULIAH, M.SKS, K.NILAI 
+        FROM MATAKULIAH_KONVERSI K
+            RIGHT JOIN MATAKULIAH M ON M.NOMOR = K.MBKM_COURSE_ID
+        WHERE MBKM_REGISTRATION_ID = $registrationId";
 
     $parse_sql = oci_parse($conn, $query);
     $query_result = [];
