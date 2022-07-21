@@ -17,8 +17,8 @@ $id = $decoded_request['id'];
 $dateStart = $decoded_request['dateStart'];
 $dateEnd = $decoded_request['dateEnd'];
 $statusKegiatan = "Kegiatan Aktif";
-$statusDokumen = "Belum Diinputkan";
 $logbook = $decoded_request['logbook'];
+$linkLogbook = $decoded_request['linkLogbook'];
 
 $query = 
     "UPDATE MBKM_REGISTRATION 
@@ -27,7 +27,7 @@ $query =
     DATE_END = '$dateEnd',
     STATUS_KEGIATAN = '$statusKegiatan',
     LOGBOOK = '$logbook',
-    STATUS_DOKUMEN = '$statusDokumen'
+    LINK_LOGBOOK = '$linkLogbook'
     WHERE ID = '$id'";
 
 $parse_sql = oci_parse($conn, $query);
@@ -37,6 +37,25 @@ try {
 } catch (\Throwable $th) {
     createErrorResponse('Item update failed!');
 } finally {
+    $statusDokumen = "Belum Diinputkan";
+    $reason = "";
+    $suggestion = "";
+    $document = "";
+    $documentName = "";
+    $query_dokumen = "INSERT INTO PENGAKUAN_SKS
+    VALUES (SEQ_PENGAKUAN_SKS.NEXTVAL, $id, '$statusDokumen',
+    '$reason', '$suggestion', '$document', '$documentName')";
+    $parse_dokumen = oci_parse($conn, $query_dokumen);
+    $execute_dokumen = oci_execute($parse_dokumen) or die(oci_error());
+
+    $statusCertificate = "Belum Diinputkan";
+    $certificate = "";
+    $certificateName = "";
+    $query_certificate = "INSERT INTO PENGUMPULAN_SERTIFIKAT
+    VALUES (SEQ_PENGUMPULAN_SERTIFIKAT.NEXTVAL, $id, '$certificate', '$certificateName', '$statusCertificate')";
+    $parse_certificate = oci_parse($conn, $query_certificate);
+    $execute_certificate = oci_execute($parse_certificate) or die(oci_error());
+
     $query = "SELECT * FROM MBKM_REGISTRATION WHERE ID = $id";
     $parse_sql = oci_parse($conn, $query);
 
