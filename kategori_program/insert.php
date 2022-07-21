@@ -11,11 +11,10 @@
  
     $programName = $input["programName"];
     $description = $input["description"];
-    $linkWebsite = $input["linkWebsite"];
-    $deadline = $input["deadline"];
-    $requirement = $input["requirement"];
 
-    $query = "INSERT INTO MBKM_KATEGORI_PROGRAM VALUES ('$programName', '$description', SEQ_KATEGORI_PROGRAM.NEXTVAL, '$linkWebsite', '$deadline') returning ID into :inserted_id";
+    $query = "INSERT INTO MBKM_KATEGORI_PROGRAM 
+    VALUES ('$programName', '$description', SEQ_KATEGORI_PROGRAM.NEXTVAL) 
+    returning ID into :inserted_id";
     
     $conn = createDatabaseConnection();
 
@@ -26,14 +25,6 @@
     $exe = oci_execute($parse_sql) or die(oci_error());
 
     if ($exe) {
-        for($x=0; $x<count($requirement); $x++) {
-            $sql = "INSERT INTO MBKM_REQUIREMENT VALUES (SEQ_REQUIREMENT.NEXTVAL, $idNumber, '$requirement[$x]')";
-
-            $parse = oci_parse($conn, $sql);
-            
-            $execute = oci_execute($parse) or die(oci_error());
-        }
-        
         $query = "SELECT * FROM MBKM_KATEGORI_PROGRAM WHERE ID = $idNumber";
         $parse_sql = oci_parse($conn, $query);
     

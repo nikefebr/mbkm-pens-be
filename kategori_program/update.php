@@ -16,39 +16,18 @@ $decoded_request = json_decode($request, true);
 $id = $decoded_request['id'];
 $programName = $decoded_request["programName"];
 $description = $decoded_request["description"];
-$linkWebsite = $decoded_request["linkWebsite"];
-$deadline = $decoded_request["deadline"];
-$requirement = $decoded_request["requirement"];
 
 $query = 
     "UPDATE MBKM_KATEGORI_PROGRAM 
     SET 
-    PROGRAM_NAME = '$programName',
+    KATEGORI_NAME = '$programName',
     DESCRIPTION = '$description' 
-    LINK_WEBSITE = '$linkWebsite',
-    DEADLINE = '$deadline',
     WHERE ID = '$id'";
 
 $parse_sql = oci_parse($conn, $query);
 
 try {
     oci_execute($parse_sql);
-
-    $sql = "SELECT ID FROM MBKM_REQUIREMENT WHERE MBKM_KATEGORI_ID = $id";
-    $parse = ociparse($conn, $sql);
-    $execute = oci_execute($parse) or die (ocierror());
-    $query_result = [];
-    oci_fetch_all($parse, $query_result, 0, 0, OCI_FETCHSTATEMENT_BY_ROW);
-
-    for($x=0; $x<count($query_result); $x++) {
-        $variable = $query_result[$x]['ID'];
-        $sql = "UPDATE MBKM_REQUIREMENT SET REQUIREMENT = '$requirement[$x]' 
-        WHERE ID = $variable";
-
-        $parse = oci_parse($conn, $sql);
-        
-        $execute = oci_execute($parse) or die(oci_error());
-    }
 } catch (\Throwable $th) {
     createErrorResponse('Item update failed!');
 } finally {
