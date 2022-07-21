@@ -28,15 +28,18 @@
     $linkKegiatan = $input["linkKegiatan"];
     $dosenWaliId = $input["dosenWaliId"];
     $namaKegiatan = $input["namaKegiatan"];
-    $statusDokumen = "";
     $documents = $input["documents"];
     $documentsName = $input["documentsName"];
+    $linkLogbook = "";
+    $picMitra = "";
+    $kontakPicMitra = "";
 
     $query = "INSERT INTO MBKM_REGISTRATION 
     VALUES (SEQ_REGISTRATION.NEXTVAL, $studentId,
     $programId, $handphone, '$description', '$mitraName', '$mitraAddress', '$linkWebsiteMitra',
     '$status', $kaprodiId, $dpkId, '$reason', '$suggestion', '$dateStart', '$dateEnd', 
-    '$statusKegiatan', '$logbook', '$linkKegiatan', $dosenWaliId, '$namaKegiatan', '$statusDokumen') 
+    '$statusKegiatan', '$logbook', '$linkKegiatan', $dosenWaliId, '$namaKegiatan', 
+    '$linkLogbook', '$picMitra', '$kontakPicMitra') 
     returning ID into :inserted_id";
     
     $conn = createDatabaseConnection();
